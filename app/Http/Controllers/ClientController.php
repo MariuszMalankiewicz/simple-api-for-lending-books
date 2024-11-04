@@ -12,4 +12,11 @@ class ClientController extends Controller
         $clients = Client::all(['first_name', 'last_name']);
         return response()->json($clients);
     }
+
+    public function show($id)
+    {
+        $client = Client::with('books')->findOrFail($id);
+        
+        return response()->json($client);
+    }
 }
