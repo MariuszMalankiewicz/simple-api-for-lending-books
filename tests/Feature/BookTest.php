@@ -20,6 +20,52 @@ class BookTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(20, 'data');
     }
+
+    public function test_it_can_search_books_by_title()
+    {
+        Book::factory()->create(['title' => 'Laravel Testing Guide']);
+        Book::factory(10)->create();
+
+        $response = $this->getJson('/api/books?search=Laravel');
+
+        $response->assertStatus(200)
+                 ->assertJsonCount(1, 'data')
+                 ->assertJsonFragment(['title' => 'Laravel Testing Guide']);
+    }
+
+    public function test_it_can_search_books_by_author()
+    {
+        Book::factory()->create(['author' => 'John Doe']);
+        Book::factory(10)->create();
+
+        $response = $this->getJson('/api/books?search=John');
+
+        $response->assertStatus(200)
+                 ->assertJsonCount(1, 'data')
+                 ->assertJsonFragment(['author' => 'John Doe']);
+    }
+
+    public function test_it_can_search_books_by_client_name()
+    {
+        $client = Client::factory()->create(['first_name' => 'Jane', 'last_name' => 'Doe']);
+        Book::factory()->create(['client_id' => $client->id, 'is_borrowed' => true]);
+        Book::factory(10)->create();
+
+        $response = $this->getJson('/api/books?search=Jane');
+
+        $response->assertStatus(200)
+                 ->assertJsonCount(1, 'data');
+    }
+
+    public function test_it_returns_no_results_if_no_books_match_search()
+    {
+        Book::factory(10)->create();
+
+        $response = $this->getJson('/api/books?search=Nonexistent');
+
+        $response->assertStatus(200)
+                 ->assertJsonCount(0, 'data');
+    }
     public function test_book_details()
     {
         $book = Book::factory()->create();
