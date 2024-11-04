@@ -38,3 +38,21 @@ This API allows you to manage books and customers, as well as support the lendin
       "total_pages": 3
     }
   }
+  ```
+  ### 2. Book Details
+  **GET** `/api/books/{id}`
+  - **Description**: Returns details about a book, including name, author, year of publication, publisher, loan status, and customer information if the book is loaned.
+  - **Answer example**:
+  ```json
+  {
+  "id": 1,
+  "title": "Example books",
+  "author": "Jan Kowalski",
+  "publication_year": 2020,
+  "publisher": "Publishing house ABC",
+  "is_borrowed": true,
+  "client": {
+    "first_name": "Piotr",
+    "last_name": "Nowak"
+  }
+}
