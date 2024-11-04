@@ -21,7 +21,7 @@ class BooksTableSeeder extends Seeder
                 'author' => $faker->name,
                 'publication_year' => $faker->year,
                 'publisher' => $faker->company,
-                'is_borrowed' => $faker->boolean,
+                'is_borrowed' => $faker->boolean(false),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
