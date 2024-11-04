@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->boolean('is_borrowed')->default(false);
             $table->string('author');
             $table->year('publication_year');
             $table->string('publisher');
-            $table->foreignId('client_id')->nullable()->constrained()->onDelete('set null');
+            $table->boolean('is_borrowed')->default(false);
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('set null');
             $table->timestamps();
         });
     }
