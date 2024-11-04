@@ -19,4 +19,20 @@ class ClientController extends Controller
         
         return response()->json($client);
     }
+
+    public function store(Request $request)
+    {
+        $client = Client::create($request->only(['first_name', 'last_name']));
+
+        return response()->json($client, 201);
+    }
+
+    public function destroy($id)
+    {
+        $client = Client::findOrFail($id);
+
+        $client->delete();
+        
+        return response()->json(['success' => 'Client deleted']);
+    }
 }

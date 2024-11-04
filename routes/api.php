@@ -9,3 +9,5 @@ Route::get('/books/{id}', [BookController::class, 'show']);
 
 Route::get('/clients', [ClientController::class, 'index']);
 Route::get('/clients/{id}', [ClientController::class, 'show']);
+Route::post('/clients', [ClientController::class, 'store']);
+Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
