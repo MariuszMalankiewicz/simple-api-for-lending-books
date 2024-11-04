@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -29,5 +30,30 @@ class BookController extends Controller
         $book = Book::with('client')->findOrFail($id);
         
         return response()->json($book);
+    }
+
+    public function borrow($id, Request $request)
+    {
+        $book = Book::findOrFail($id);
+        if ($book->is_borrowed) return response()->json(['error' => 'Book already borrowed'], 400);
+
+        $client = Client::findOrFail($request->client_id);
+        $book->is_borrowed = true;
+        $book->client_id = $client->id;
+        $book->save();
+
+        return response()->json(['success' => 'Book borrowed successfully']);
+    }
+
+    public function return($id)
+    {
+        $book = Book::findOrFail($id);
+        if (!$book->is_borrowed) return response()->json(['error' => 'Book is not borrowed'], 400);
+
+        $book->is_borrowed = false;
+        $book->client_id = null;
+        $book->save();
+
+        return response()->json(['success' => 'Book returned successfully']);
     }
 }
